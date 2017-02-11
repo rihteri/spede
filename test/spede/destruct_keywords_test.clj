@@ -1,7 +1,8 @@
 (ns spede.destruct-keywords-test
   (:require  [clojure.test :as t]
              [clojure.spec :as s]
-             [spede.core :as es]))
+             [spede.core :as es]
+             [spede.args.map :as map]))
 
 (s/def ::a integer?)
 
@@ -9,10 +10,8 @@
           (* a a))
 
 (t/deftest argname
-  (let [param-name (-> (macroexpand-1 `(es/sdefn some-func [{a ::a :as somemap}] (* a a)))
-                       second
-                       last
-                       second)]
+  (let [param-name (-> (map/parse-map {`a ::a :as `somemap})
+                       first)]
     (t/is (= :somemap param-name))))
 
 (t/deftest keywords-in-destruct-form
