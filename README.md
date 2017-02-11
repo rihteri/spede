@@ -5,13 +5,14 @@ spec that automatically includes any destructured forms in the parameter list.
 
 
 ## Usage
-
+```clojure
 (s/def ::a integer?)
 
 (spede/sdefn my-func [{a ::a}]
   (+ a a))
           
   -> defn + (s/fdef my-func (s/cat :firstarg (s/keys :req [::a])))
+  ```
 
 ## License
 
