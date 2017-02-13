@@ -6,24 +6,19 @@
             [spede.parse-macro-arg :as al]
             [spede.args.array]))
 
-(defn- make-arg [arg-list]
-  [:args
-   (apply list (into ['clojure.spec/cat]
-                     (apply concat (map args/parse-args arg-list))))])
-
-(defn- make-fdef [name arg-list]
+(defn- make-fdef [name arg-lists]
   (apply list
          (into ['clojure.spec/fdef name]
-               (make-arg arg-list))))
+               (args/make-args arg-lists))))
 
 (defmacro sdefn
-  "Define a function and function spec."
+  "Define a function and function spec. Use like you would a defn."
   {:arglists '([name doc-string? attr-map? [params*] prepost-map? body]
-               #_[name doc-string? attr-map? ([params*] prepost-map? body)+ attr-map?])}
+               [name doc-string? attr-map? ([params*] prepost-map? body)+ attr-map?])}
   [name & fdecl]
-  (let [arg-list (al/get-arg-list fdecl)]
+  (let [arg-lists (al/get-arg-list fdecl)]
     `(do
-       ~(make-fdef name arg-list)
+       ~(make-fdef name arg-lists)
        ~(apply list (into [`defn name]
                           fdecl)))))
 
