@@ -5,7 +5,7 @@
 
 
 (es/sdefn test-fun [a b c]
-          (+ a b c))
+  (+ a b c))
 
 (st/instrument `test-fun)
 

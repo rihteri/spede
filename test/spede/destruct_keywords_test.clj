@@ -8,7 +8,7 @@
 (s/def ::a integer?)
 
 (es/sdefn some-func [{a ::a :as somemap}]
-          (* a a))
+  (* a a))
 
 (t/deftest argname
   (let [param-name (tu/get-name-of-first-arg `some-func)]

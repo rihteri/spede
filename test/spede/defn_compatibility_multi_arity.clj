@@ -5,10 +5,10 @@
              [clojure.spec.test :as st]))
 
 (sd/sdefn sf
-          "docses"
-          {:ugh 123}
-          ([a] (* a a))
-          ([a [b]] (* a b)))
+  "docses"
+  {:ugh 123}
+  ([a] (* a a))
+  ([a [b]] (* a b)))
 
 (st/instrument `sf)
 

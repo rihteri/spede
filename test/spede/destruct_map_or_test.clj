@@ -10,11 +10,10 @@
 (s/def ::b integer?)
 
 (es/sdefn some-func [{aa ::a b ::b :or {aa 0}}]
-          (+ aa b))
+  (+ aa b))
 
 (es/sdefn some-other-func [{:keys [:a :b] :or {a 0}}]
-          (+ a b))
-
+  (+ a b))
 
 (st/instrument `some-func)
 (st/instrument `some-other-func)

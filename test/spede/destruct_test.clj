@@ -12,7 +12,7 @@
 (es/sdefn destr [{a ::a b ::b c ::c}
                  {a2 ::a b2 ::b c2 ::c}
                  {a3 ::a b3 ::b c3 ::c}]
-          (+ a b c))
+  (+ a b c))
 
 (st/instrument `destr)
 

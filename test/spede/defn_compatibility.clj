@@ -3,13 +3,13 @@
              [spede.core :as sd]))
 
 (sd/sdefn specced-fun
-          "some doc-str"
-          {:ugh 123}
-          [a b]
-          {:pre [(pos? a)]
-           :post [(= % (* a a))]}
-          (+ a b)
-          (* a b))
+  "some doc-str"
+  {:ugh 123}
+  [a b]
+  {:pre [(pos? a)]
+   :post [(= % (* a a))]}
+  (+ a b)
+  (* a b))
 
 (t/deftest fundef
   (t/is (= 1 (specced-fun 1 1)))

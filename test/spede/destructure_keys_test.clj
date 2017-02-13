@@ -9,7 +9,7 @@
 (s/def ::a integer?)
 
 (es/sdefn some-func [{:keys [::a ::b ::c]}]
-          (+ a b c))
+  (+ a b c))
 
 (st/instrument `some-func)
 

@@ -6,11 +6,14 @@
              [spede.test-utils :as tu])
   (:import clojure.lang.ExceptionInfo))
 
-(sd/sdefn some-func [[a b]] (+ a b))
+(sd/sdefn some-func [[a b]]
+  (+ a b))
 
-(sd/sdefn some-other-func [[a b :as ugh]] (+ a b (apply + ugh)))
+(sd/sdefn some-other-func [[a b :as ugh]]
+  (+ a b (apply + ugh)))
 
-(sd/sdefn func-with-rest [[a b & c]] (apply + (into [a b] c)))
+(sd/sdefn func-with-rest [[a b & c]]
+  (apply + (into [a b] c)))
 
 (st/instrument [`some-func
                 `some-other-func

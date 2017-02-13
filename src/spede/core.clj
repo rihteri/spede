@@ -14,7 +14,8 @@
 (defmacro sdefn
   "Define a function and function spec. Use like you would a defn."
   {:arglists '([name doc-string? attr-map? [params*] prepost-map? body]
-               [name doc-string? attr-map? ([params*] prepost-map? body)+ attr-map?])}
+               [name doc-string? attr-map? ([params*] prepost-map? body)+ attr-map?])
+   :style/indent :defn}
   [name & fdecl]
   (let [arg-lists (al/get-arg-list fdecl)]
     `(do
