@@ -34,4 +34,4 @@
                          (take-while (complement is-arg-list-or-multi-arity?))
                          (take-while (complement keyword?)))
         after-fdef (drop-while (complement is-arg-list-or-multi-arity?) fdecl)]
-    (concat before-fdef (when (not= fdecl before-fdef) after-fdef))))
+    (concat before-fdef after-fdef)))
