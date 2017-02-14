@@ -14,10 +14,10 @@
     [kw (make-arg arg-list)]))
 
 (defn make-args [arg-lists]
-  [:args (if (= 1 (count arg-lists))
-           (make-arg (first arg-lists))
-           (apply list (into [`s/or]
-                             (->> arg-lists
-                                  (map make-arg-kw-pair)
-                                  (apply concat)))))])
+  (if (= 1 (count arg-lists))
+    (make-arg (first arg-lists))
+    (apply list (into [`s/or]
+                      (->> arg-lists
+                           (map make-arg-kw-pair)
+                           (apply concat))))))
 
