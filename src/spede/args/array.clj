@@ -50,12 +50,16 @@
                             (filter (complement nil?)))
         rest-symb      (->> arg
                             (drop-while (complement is-rest-placeholder?))
-                            (take 2))]
+                            (drop 1)
+                            (take 2))
+        rest-kw        (when (not (empty? rest-symb))
+                         (-> rest-symb first name keyword))]
     (->> (-> ['clojure.spec/cat]
              (into (->> sym-spec-pairs
                         (map args/parse-args)
                         (map wrap-in-spec-if-regexp-op)
-                        (apply concat))))
+                        (apply concat)))
+             (into (filter (complement nil?) [rest-kw (when rest-kw `(s/* any?))])))
          (apply list))))
 
 (defn not-empty? [a]

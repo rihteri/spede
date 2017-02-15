@@ -13,12 +13,18 @@
 (sd/sdefn funv [[[a b] c] d]
   (+ a b c d))
 
+(sd/sdefn fun-more [[[a] b] & c]
+  (+ a b (apply * c)))
+
 (st/instrument [`fun
-                `funv])
+                `funv
+                `fun-more])
 
 (t/deftest normal-call
   (t/is (= 6 (fun [{:a 1 :b 2} 2] 3)))
-  (t/is (= 7 (funv [[1 1] 2] 3))))
+  (t/is (= 7 (funv [[1 1] 2] 3)))
+  (t/is (= 9 (fun-more [[1] 2] 2 3)))
+  (t/is (= 6 (fun-more [[1] 2] 3))))
 
 (t/deftest spec-fail
   (t/is (thrown-with-msg? clojure.lang.ExceptionInfo tu/spec-err
