@@ -3,7 +3,8 @@
              [spede.core :as es]
              [clojure.spec :as s]
              [clojure.spec.test :as st]
-             [spede.args.map :as map])
+             [spede.args.map :as map]
+             [spede.test-utils :as tu])
   (:import clojure.lang.ExceptionInfo))
 
 (s/def ::a integer?)
@@ -14,8 +15,7 @@
 (st/instrument `some-func)
 
 (t/deftest spec-gen
-  (let [spec (->> (map/parse-map {`c ::c :keys [::a ::b]})
-                  second
+  (let [spec (->> (tu/get-spec-of-first-arg `some-func)
                   (drop 1)
                   (apply hash-map))]
     (t/is (= #{::a ::b ::c} (->> spec

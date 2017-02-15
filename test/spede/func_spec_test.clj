@@ -7,7 +7,7 @@
 
 (sd/sdefn fun
   "function which has function specs"
-  :args #(= 0 (apply + (vals %)))
+  :args #(= 0 (apply + %))
   [a b c]
   (* a b c))
 

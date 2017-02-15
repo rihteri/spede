@@ -54,7 +54,7 @@
     sym
     (symbol (str *ns*) (str sym))))
 
-(defn parse-map [{optionals :or :keys [:as] :as arg}]
+(defn parse-map [[{optionals :or :keys [:as] :as arg} spec]]
   (let [argname (if as
                   (keyword (name as))
                   (keyword (gensym)))
