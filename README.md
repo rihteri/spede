@@ -5,7 +5,7 @@ spec that includes any destructured forms in the parameter list.
 
 ## Usage
 ```clojure
-(s/def ::a integer?) ; you still spec your keywords normally
+(s/def ::a valid-data?) ; you still spec your keywords normally
 
 (spede/sdefn my-func [{a ::a}]
   (+ a a))
@@ -31,6 +31,19 @@ TLDR:
   
   -> (defn my-func ...)
   -> (s/fdef my-func :args (s/and my-additional-arg-predicate? (s/cat ...)) :fn ... :ret ...)
+```
+
+You can also specify the spec of a symbol in the binding form. A single predicate
+has to be put in a (s/def) call to give it a namespace keyword.
+
+```clojure
+(s/def ::a valid-data?)
+
+(spede/sdefn my-func [a ::a]
+  (+ a a))
+
+  -> (defn my-func ...)
+  -> (s/fdef my-func :args (s/cat :a ::a))
 ```
 
 ## License

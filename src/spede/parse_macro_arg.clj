@@ -1,11 +1,16 @@
-(ns spede.parse-macro-arg)
+(ns spede.parse-macro-arg
+  (:require [spede.defn :as defn]))
+
+(defn is-arg-list? [form]
+  (vector? form))
 
 (defn is-multi-arity? [form]
-  (list? form))
+  (and (seq? form)
+       (-> form first is-arg-list?)))
 
 (defn is-arg-list-or-multi-arity? [form]
   (or (is-multi-arity? form)
-      (vector? form)))
+      (is-arg-list? form)))
 
 (defn get-arg-list [fdecl]
   (let [defs             (->> fdecl
@@ -30,8 +35,15 @@
        (apply hash-map)))
 
 (defn get-defn-args [fdecl]
-  (let [before-fdef (->> fdecl
-                         (take-while (complement is-arg-list-or-multi-arity?))
-                         (take-while (complement keyword?)))
-        after-fdef (drop-while (complement is-arg-list-or-multi-arity?) fdecl)]
-    (concat before-fdef after-fdef)))
+  (let [before-fdef               (->> fdecl
+                                       (take-while (complement is-arg-list-or-multi-arity?))
+                                       (take-while (complement keyword?)))
+        arg-lists-or-multi-bodies (->> fdecl
+                                       (drop-while (complement is-arg-list-or-multi-arity?))
+                                       (take-while is-arg-list-or-multi-arity?))
+        after-fdef                (->> fdecl
+                                       (drop-while (complement is-arg-list-or-multi-arity?))
+                                       (drop-while is-arg-list-or-multi-arity?))]
+    (concat before-fdef
+            (map defn/make-vanilla-arg-list arg-lists-or-multi-bodies)
+            after-fdef)))

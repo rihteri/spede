@@ -1,6 +1,7 @@
 (ns spede.args.array
   (:require [spede.args.core :as args]
-            [clojure.spec :as s]))
+            [clojure.spec :as s]
+            [spede.predicates :as preds]))
 
 (defn is-qualifier?
 "Check if the argument or first member of argument pair
@@ -24,15 +25,11 @@
   (and (not (is-qualifier? a))
        (not (is-rest-placeholder? a))))
 
-(defn is-spec-kw? [a]
-  (and (keyword? a)
-       (not (nil? (namespace a)))))
-
 (defn make-symbol-spec-pair [[a b]]
   (cond
     (or (not (normal-symbol? a))
-        (is-spec-kw? a)) nil
-    (not (is-spec-kw? b)) [a nil]
+        (preds/is-spec-kw? a)) nil
+    (not (preds/is-spec-kw? b)) [a nil]
     :else [a b]))
 
 (defn wrap-in-spec-if-regexp-op [[argname argspec]]
@@ -73,7 +70,7 @@
 
 (defn contains-destruct-or-specs? [arg]
   (let [has-specs (->> arg
-                       (filter is-spec-kw?)
+                       (filter preds/is-spec-kw?)
                        not-empty?)
         has-destructs (->> arg
                            (filter is-destruct?)
