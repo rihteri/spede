@@ -2,13 +2,12 @@
   (:require [spede.predicates :as preds]))
 
 (defn make-vanilla-arg-list
-  "Take a spec-decorated argument list and return the vanilla version"
+  "Turn a spec-decorated argument list into defn-compatible, recursively."
   [arg]
-  (cond
-    (vector? arg) (->> arg
-                       (filter (complement preds/is-spec-kw?))
-                       (mapv make-vanilla-arg-list))
-    (seq? arg) (->> (into [(make-vanilla-arg-list (first arg))]
-                           (rest arg))
-                     (apply list))
-    ::else arg))
+  (if (preds/is-binding? arg)
+    (->> arg
+         (filter (complement preds/is-spec-kw?))
+         (mapv make-vanilla-arg-list))
+    arg))
+
+
