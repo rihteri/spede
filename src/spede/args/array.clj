@@ -16,8 +16,18 @@
 (defn is-rest-placeholder? [sym]
   (= sym `&))
 
-(defn make-seqable-predicate [min-len is-unbounded]
-  (let [operator (if is-unbounded `>= `=)]
+(defn make-seqable-predicate [arg]
+  (let [is-unbounded (->> arg
+                          (filter is-rest-placeholder?)
+                          empty?
+                          not)
+        operator     (if is-unbounded `>= `=)
+        min-len      (->> arg
+                          (partition 2 1 [nil])
+                          (take-while (complement is-qualifier?))
+                          (map first)
+                          (take-while (complement is-rest-placeholder?))
+                          count)]
     `(s/and seqable?
             #(~operator (count %) ~min-len))))
 
@@ -69,9 +79,9 @@
                (type a)))
 
 (defn contains-destruct-or-specs? [arg]
-  (let [has-specs (->> arg
-                       (filter preds/is-spec-kw?)
-                       not-empty?)
+  (let [has-specs     (->> arg
+                           (filter preds/is-spec-kw?)
+                           not-empty?)
         has-destructs (->> arg
                            (filter is-destruct?)
                            not-empty?)]
@@ -85,18 +95,8 @@
                           (apply hash-map))
         argname      (if (:as qualifiers)
                        (-> qualifiers :as name keyword)
-                       (-> (gensym) name keyword))
-        is-unbounded (->> arg
-                          (filter is-rest-placeholder?)
-                          empty?
-                          not)
-        min-len      (->> arg
-                          (partition 2 1 [nil])
-                          (take-while (complement is-qualifier?))
-                          (map first)
-                          (take-while (complement is-rest-placeholder?))
-                          count)]
+                       (-> (gensym) name keyword))]
     [argname
      (if (contains-destruct-or-specs? arg)
        (make-cat-predicate arg)
-       (make-seqable-predicate min-len is-unbounded))]))
+       (make-seqable-predicate arg))]))
