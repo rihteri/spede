@@ -18,7 +18,16 @@
 (sd/sdefn fun [a ::a-spec b ::b-spec]
   (* a b))
 
-(st/instrument `fun)
+(sd/sdefn fun-2 [a ::a-spec & b ::a-spec]
+  (map #(* a %) b))
+
+(st/instrument [`fun
+                `fun-2])
+
+(t/deftest rest-specced
+  (t/is (= [2 4 6] (fun-2 2 1 2 3)))
+  (t/is (thrown-with-msg? ExceptionInfo tu/spec-err
+                          (fun-2 2 1 2 3.0))))
 
 (t/deftest arglist-spec
   (t/is (= 1.5 (* 3 0.5))))

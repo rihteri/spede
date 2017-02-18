@@ -22,7 +22,6 @@
 
 (defn separate-predicate?
   [arg]
-  (println arg)
   (= 0 (+ (:a arg) (:b arg) (:c arg))))
 
 (sd/sdefn fun-3
