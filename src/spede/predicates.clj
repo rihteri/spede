@@ -14,3 +14,6 @@
 (defn is-binding-or-multi-arity? [form]
   (or (is-multi-arity? form)
       (is-binding? form)))
+
+(defn is-fdef-arg? [[a b]]
+  (keyword? a))
